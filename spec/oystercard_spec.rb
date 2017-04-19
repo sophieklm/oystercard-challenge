@@ -17,7 +17,13 @@ describe Oystercard do
       it "should raise error if top up breaches limit" do
         max_balance = Oystercard::MAXBALANCE
         oystercard.top_up(max_balance)
-        expect{ oystercard.top_up(1) }.to raise_error "Top-up is over maximum balance #{max_balance}"
+        expect{ oystercard.top_up(1) }.to raise_error "Top-up is over maximum balance £#{max_balance}"
+      end
+    end
+
+    describe "#deduct" do
+      it "Expects #deduct to change balance" do
+        expect { oystercard.deduct(1) }.to change { oystercard.balance }.by(-1)
       end
     end
 end

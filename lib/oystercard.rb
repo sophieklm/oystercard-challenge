@@ -6,8 +6,12 @@ class Oystercard
   end
 
   def top_up(amount = 0)
-    raise "Top-up is over maximum balance #{MAXBALANCE}" if exceed_balance?(amount)
+    raise "Top-up is over maximum balance £#{MAXBALANCE}" if exceed_balance?(amount)
     increment_balance(amount)
+  end
+
+  def deduct(fare)
+    self.balance -= fare
   end
 
   private
@@ -16,7 +20,7 @@ class Oystercard
   MAXBALANCE = 100
 
   def exceed_balance?(amount)
-    (self.balance + amount > MAXBALANCE)
+    self.balance + amount > MAXBALANCE
   end
 
   def increment_balance(amount)
