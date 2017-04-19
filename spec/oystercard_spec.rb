@@ -37,6 +37,10 @@ describe Oystercard do
     it "changes #in_journey? to true" do
       expect { oystercard.touch_in }.to change { oystercard.in_journey? }.to true
     end
+    it "#touch_in when already travelling raises error" do
+      oystercard.touch_in
+      expect { oystercard.touch_in }.to raise_error "Already travelling"
+    end
   end
 
   describe "#touch_out" do
