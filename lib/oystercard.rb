@@ -15,6 +15,9 @@ class Oystercard
     self.balance -= fare
   end
 
+  def in_journey?
+  end
+  
   private
 
   attr_writer :balance
