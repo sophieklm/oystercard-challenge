@@ -29,7 +29,11 @@ describe Oystercard do
 
   describe "#in_journey?" do
     it { is_expected.to respond_to :in_journey? }
-    it { is_expected.to be true }
+    it { is_expected.to be false }
+  end
+
+  describe "#touch_in" do
+    it { is_expected.to respond_to :touch_in }
   end
 
 end

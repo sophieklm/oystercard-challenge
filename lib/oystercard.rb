@@ -16,8 +16,9 @@ class Oystercard
   end
 
   def in_journey?
+    false
   end
-  
+
   private
 
   attr_writer :balance
