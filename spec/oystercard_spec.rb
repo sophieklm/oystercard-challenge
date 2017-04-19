@@ -23,7 +23,7 @@ describe Oystercard do
 
   describe "#deduct" do
     it "Expects #deduct to change balance" do
-      expect { oystercard.deduct(1) }.to change { oystercard.balance }.by(-1)
+      expect{ oystercard.deduct(1) }.to change{ oystercard.balance }.by(-1)
     end
   end
 
@@ -35,18 +35,21 @@ describe Oystercard do
 
   describe "#touch_in" do
     it "changes #in_journey? to true" do
-      expect { oystercard.touch_in }.to change { oystercard.in_journey? }.to true
+      expect{ oystercard.touch_in }.to change{ oystercard.in_journey? }.to true
     end
     it "#touch_in when already travelling raises error" do
       oystercard.touch_in
-      expect { oystercard.touch_in }.to raise_error "Already travelling"
+      expect{ oystercard.touch_in }.to raise_error "Already travelling"
     end
   end
 
   describe "#touch_out" do
     it "changes #in_journey to false" do
       oystercard.touch_in
-      expect { oystercard.touch_out }.to change { oystercard.in_journey? }.to false
+      expect{ oystercard.touch_out }.to change{ oystercard.in_journey? }.to false
+    end
+    it "raises error if touch_out when not in journey" do
+      expect(oystercard.touch_out).to raise_error "ERROR! Not travelling!"
     end
   end
 
