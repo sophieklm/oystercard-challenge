@@ -24,6 +24,10 @@ class Oystercard
     change_journey_status
   end
 
+  def touch_out
+    change_journey_status
+  end
+
   private
 
   attr_writer :balance, :in_journey
@@ -39,7 +43,8 @@ class Oystercard
   end
 
   def change_journey_status
-    self.in_journey = true
+    return self.in_journey = false if self.in_journey?
+    return self.in_journey = true if self.in_journey? == false
   end
 
 end
