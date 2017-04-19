@@ -3,60 +3,62 @@ require 'oystercard'
 describe Oystercard do
   subject(:oystercard) { described_class.new }
 
-  describe "#balance" do
-    it "Should return 0 balance" do
+  describe '#balance' do
+    it 'Should return 0 balance' do
       expect(oystercard.balance).to eq(0)
     end
   end
 
-  describe "#top_up" do
-    it "Expects #top_up to change balance" do
-      expect{ oystercard.top_up(10) }.to change{ oystercard.balance }.by(10)
+  describe '#top_up' do
+    it 'Expects #top_up to change balance' do
+      expect { oystercard.top_up(10) }.to change { oystercard.balance }.by(10)
     end
 
-    it "Should raise error if top up breaches limit" do
+    it 'Should raise error if top up breaches limit' do
       max_balance = Oystercard::MAXBALANCE
       oystercard.top_up(max_balance)
-      expect{ oystercard.top_up(1) }.to raise_error "Top-up over max balance £#{max_balance}"
+      expect { oystercard.top_up(1) }.to raise_error "Top-up over max balance £#{max_balance}"
     end
   end
 
-  describe "#deduct" do
-    it "Expects #deduct to change balance" do
-      expect{ oystercard.deduct(1) }.to change{ oystercard.balance }.by(-1)
+  describe '#deduct' do
+    it 'Expects #deduct to change balance' do
+      expect { oystercard.deduct(1) }.to change { oystercard.balance }.by(-1)
     end
   end
 
-  describe "#in_journey?" do
-    it "Expects #in_journey to return false" do
+  describe '#in_journey?' do
+    it 'Expects #in_journey to return false' do
       expect(oystercard.in_journey?).to eq false
     end
   end
 
-  describe "#touch_in" do
-    it "changes #in_journey? to true" do
-      expect{ oystercard.touch_in }.to change{ oystercard.in_journey? }.to true
+  describe '#touch_in' do
+    it 'changes #in_journey? to true' do
+      oystercard.top_up(20)
+      expect { oystercard.touch_in }.to change { oystercard.in_journey? }.to true
     end
-    it "#touch_in when already travelling raises error" do
+    it '#touch_in when already travelling raises error' do
+      oystercard.top_up(10)
       oystercard.touch_in
-      expect{ oystercard.touch_in }.to raise_error "Already travelling"
+      expect { oystercard.touch_in }.to raise_error 'Already travelling'
     end
-    context "low_balance" do
-      it "Raises an error" do
-        oystercard.top_up(0.5)
-        expect{ oystercard.touch_in }.to raise_error "Not enough funds"
+      context 'low_balance' do
+        it 'Raises an error' do
+          oystercard.top_up(0.5)
+          expect { oystercard.touch_in }.to raise_error 'Not enough funds'
+        end
       end
-    end
   end
 
-  describe "#touch_out" do
-    it "changes #in_journey to false" do
+  describe '#touch_out' do
+    it 'changes #in_journey to false' do
+      oystercard.top_up(10)
       oystercard.touch_in
-      expect{ oystercard.touch_out }.to change{ oystercard.in_journey? }.to false
+      expect { oystercard.touch_out }.to change { oystercard.in_journey? }.to false
     end
-    it "raises error if touch_out when not in journey" do
-      expect{ oystercard.touch_out }.to raise_error "ERROR! Not travelling!"
+    it 'raises error if touch_out when not in journey' do
+      expect { oystercard.touch_out }.to raise_error 'ERROR! Not travelling!'
     end
   end
-
 end

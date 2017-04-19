@@ -1,5 +1,6 @@
 
 class Oystercard
+
   attr_reader :balance, :in_journey
 
   def initialize(balance = 0)
@@ -17,16 +18,17 @@ class Oystercard
   end
 
   def in_journey?
-    self.in_journey
+    in_journey
   end
 
   def touch_in
-    fail 'Already travelling' if self.in_journey?
+    raise 'Not enough funds' if self.balance < 1
+    raise 'Already travelling' if in_journey?
     change_journey_status
   end
 
   def touch_out
-    fail 'ERROR! Not travelling!' if self.in_journey? == false
+    raise 'ERROR! Not travelling!' if in_journey? == false
     change_journey_status
   end
 
@@ -45,8 +47,7 @@ class Oystercard
   end
 
   def change_journey_status
-    return self.in_journey = false if self.in_journey?
-    return self.in_journey = true if self.in_journey? == false
+    return self.in_journey = false if in_journey?
+    return self.in_journey = true if in_journey? == false
   end
-
 end
