@@ -61,5 +61,12 @@ describe Oystercard do
     it 'raises error if touch_out when not in journey' do
       expect { oystercard.touch_out }.to raise_error 'ERROR! Not travelling!'
     end
+
+      context "change balance" do
+        it "deducts fare" do
+          oystercard.top_up(20)
+          expect { oystercard.touch_out }.to change {oystercard.balance }.by -2
+        end
+      end
   end
 end
