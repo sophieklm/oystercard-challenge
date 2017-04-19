@@ -19,6 +19,9 @@ class Oystercard
     false
   end
 
+  def touch_in
+  end
+  
   private
 
   attr_writer :balance
