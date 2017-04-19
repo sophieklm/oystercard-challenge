@@ -26,6 +26,7 @@ class Oystercard
   end
 
   def touch_out
+    fail 'ERROR! Not travelling!' if self.in_journey? == false
     change_journey_status
   end
 

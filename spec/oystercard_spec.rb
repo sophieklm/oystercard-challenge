@@ -41,6 +41,12 @@ describe Oystercard do
       oystercard.touch_in
       expect{ oystercard.touch_in }.to raise_error "Already travelling"
     end
+    context "low_balance" do
+      it "Raises an error" do
+        oystercard.top_up(0.5)
+        expect{ oystercard.touch_in }.to raise_error "Not enough funds"
+      end
+    end
   end
 
   describe "#touch_out" do
@@ -49,7 +55,7 @@ describe Oystercard do
       expect{ oystercard.touch_out }.to change{ oystercard.in_journey? }.to false
     end
     it "raises error if touch_out when not in journey" do
-      expect(oystercard.touch_out).to raise_error "ERROR! Not travelling!"
+      expect{ oystercard.touch_out }.to raise_error "ERROR! Not travelling!"
     end
   end
 
