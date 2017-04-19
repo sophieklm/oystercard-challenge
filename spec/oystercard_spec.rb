@@ -29,13 +29,14 @@ describe Oystercard do
 
   describe "#in_journey?" do
     it { is_expected.to respond_to :in_journey? }
-    it { is_expected.to be false }
+    it "Expects #in_journey to return false" do
+      expect(oystercard.in_journey?).to eq false
+    end
   end
 
   describe "#touch_in" do
     it { is_expected.to respond_to :touch_in }
     it "changes #in_journey? to true" do
-      oystercard.touch_in
       expect { oystercard.touch_in }.to change { oystercard.in_journey? }.to true
     end
   end

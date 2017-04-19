@@ -1,9 +1,10 @@
 
 class Oystercard
-  attr_reader :balance
+  attr_reader :balance, :in_journey
 
   def initialize(balance = 0)
     @balance = balance
+    @in_journey = false
   end
 
   def top_up(amount = 0)
@@ -16,15 +17,16 @@ class Oystercard
   end
 
   def in_journey?
-    false
+    self.in_journey
   end
 
   def touch_in
+    change_journey_status
   end
-  
+
   private
 
-  attr_writer :balance
+  attr_writer :balance, :in_journey
 
   MAXBALANCE = 100
 
@@ -34,6 +36,10 @@ class Oystercard
 
   def increment_balance(amount)
     self.balance += amount
+  end
+
+  def change_journey_status
+    self.in_journey = true
   end
 
 end
