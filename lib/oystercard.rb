@@ -21,6 +21,7 @@ class Oystercard
   end
 
   def touch_in
+    fail 'Already travelling' if self.in_journey?
     change_journey_status
   end
 
