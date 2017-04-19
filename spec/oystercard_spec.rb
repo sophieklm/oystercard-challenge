@@ -15,7 +15,7 @@ describe Oystercard do
     end
 
     it 'Should raise error if top up breaches limit' do
-      max_balance = Oystercard::MAXBALANCE
+      max_balance = Oystercard::MAX_BALANCE
       oystercard.top_up(max_balance)
       expect { oystercard.top_up(1) }.to raise_error "Top-up over max balance £#{max_balance}"
     end
@@ -45,7 +45,8 @@ describe Oystercard do
     end
       context 'low_balance' do
         it 'Raises an error' do
-          oystercard.top_up(0.5)
+          low_balance = Oystercard::LOW_BALANCE
+          oystercard.top_up(low_balance - 1)
           expect { oystercard.touch_in }.to raise_error 'Not enough funds'
         end
       end

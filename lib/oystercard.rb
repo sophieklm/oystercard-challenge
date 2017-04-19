@@ -9,7 +9,7 @@ class Oystercard
   end
 
   def top_up(amount = 0)
-    raise "Top-up over max balance £#{MAXBALANCE}" if exceed_balance?(amount)
+    raise "Top-up over max balance £#{MAX_BALANCE}" if exceed_balance?(amount)
     increment_balance(amount)
   end
 
@@ -22,7 +22,7 @@ class Oystercard
   end
 
   def touch_in
-    raise 'Not enough funds' if self.balance < 1
+    raise 'Not enough funds' if balance < LOW_BALANCE
     raise 'Already travelling' if in_journey?
     change_journey_status
   end
@@ -36,10 +36,11 @@ class Oystercard
 
   attr_writer :balance, :in_journey
 
-  MAXBALANCE = 100
+  MAX_BALANCE = 100
+  LOW_BALANCE = 1
 
   def exceed_balance?(amount)
-    self.balance + amount > MAXBALANCE
+    self.balance + amount > MAX_BALANCE
   end
 
   def increment_balance(amount)
