@@ -1,11 +1,12 @@
 
 class Oystercard
 
-  attr_reader :balance
+  attr_reader :balance, :origin
 
   def initialize(balance = 0)
     @balance = balance
     @in_journey = false
+    @origin = nil
   end
 
   def top_up(amount = 0)
@@ -17,13 +18,11 @@ class Oystercard
     in_journey
   end
 
-  def origin
-  end
-
-  def touch_in
+  def touch_in(entry_station)
     raise 'Not enough funds' if balance < LOW_BALANCE
     raise 'Already travelling' if in_journey?
     change_journey_status
+    @origin = entry_station
   end
 
   def touch_out

@@ -27,53 +27,54 @@ describe Oystercard do
     end
   end
 
-  describe '#touch_in' do
+  describe '#touch_in(entry_station)' do
+    let(:station){ double :station }
+    subject(:oystercard) { described_class.new }
     it 'changes #in_journey? to true' do
       oystercard.top_up(20)
-      expect { oystercard.touch_in }.to change { oystercard.in_journey? }.to true
+      expect { oystercard.touch_in(:station) }.to change { oystercard.in_journey? }.to true
     end
-    it '#touch_in when already travelling raises error' do
+    it '#touch_in(entry_station) when already travelling raises error' do
       oystercard.top_up(10)
-      oystercard.touch_in
-      expect { oystercard.touch_in }.to raise_error 'Already travelling'
-    end
-    it 'updates @origin with the current station' do
-      station = :waterloo
-      expect(oystercard).to receive(:origin).and_return(station)
-      oystercard.top_up(10)
-      oystercard.touch_in(station)
-      expect(oystercard.origin).to eq station
+      oystercard.touch_in(:station)
+      expect { oystercard.touch_in(:station) }.to raise_error 'Already travelling'
     end
       context 'low_balance' do
         it 'Raises an error' do
           low_balance = Oystercard::LOW_BALANCE
           oystercard.top_up(low_balance - 1)
-          expect { oystercard.touch_in }.to raise_error 'Not enough funds'
+          expect { oystercard.touch_in(:station) }.to raise_error 'Not enough funds'
         end
+      end
+      it 'updates @origin with the current station' do
+        oystercard.top_up(10)
+        oystercard.touch_in(:station)
+        expect(oystercard.origin).to eq :station
       end
   end
 
   describe '#touch_out' do
+    let(:station){ double :station }
     it 'changes #in_journey to false' do
       oystercard.top_up(10)
-      oystercard.touch_in
+      oystercard.touch_in(:station)
       expect { oystercard.touch_out }.to change { oystercard.in_journey? }.to false
     end
     it 'raises error if touch_out when not in journey' do
       expect { oystercard.touch_out }.to raise_error 'ERROR! Not travelling!'
     end
+    it 'sets #origin to nil' do
+      oystercard.top_up(10)
+      oystercard.touch_in(:station)
+      expect { oystercard.touch_out }.to change { oystercard.origin }.to nil
+    end
 
       context "change balance" do
         it "deducts fare" do
           oystercard.top_up(20)
-          oystercard.touch_in
+          oystercard.touch_in(:station)
           expect { oystercard.touch_out }.to change {oystercard.balance }.by -Oystercard::FARE
         end
       end
+    end
   end
-
-  describe '#origin' do
-    it { is_expected.to respond_to :origin }
-    it ''
-  end
-end
