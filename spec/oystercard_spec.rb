@@ -86,7 +86,7 @@ describe Oystercard do
     end
   describe '#journeys' do
     it 'card has an empty list of journeys by default' do
-      expect(oystercard.journeys).to eq []
+      expect(oystercard.journeys).to be_empty
     end
   end
   end
