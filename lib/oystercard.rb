@@ -5,7 +5,6 @@ class Oystercard
 
   def initialize(balance = 0)
     @balance = balance
-    @in_journey = false
     @origin = nil
   end
 
@@ -15,7 +14,7 @@ class Oystercard
   end
 
   def in_journey?
-    in_journey
+    !!@origin
   end
 
   def touch_in(entry_station)
@@ -29,6 +28,7 @@ class Oystercard
     raise 'ERROR! Not travelling!' if in_journey? == false
     change_journey_status
     deduct(FARE)
+    @origin = nil
   end
 
   private

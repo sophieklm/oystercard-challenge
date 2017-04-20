@@ -55,6 +55,9 @@ describe Oystercard do
 
   describe '#touch_out' do
     let(:station){ double :station }
+    it 'takes one argument' do
+      expect(oystercard).to respond_to(:touch_out).with(1).argument
+    end
     it 'changes #in_journey to false' do
       oystercard.top_up(10)
       oystercard.touch_in(:station)
@@ -76,5 +79,6 @@ describe Oystercard do
           expect { oystercard.touch_out }.to change {oystercard.balance }.by -Oystercard::FARE
         end
       end
+
     end
   end
