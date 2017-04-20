@@ -1,7 +1,7 @@
 
 class Oystercard
 
-  attr_reader :balance, :in_journey
+  attr_reader :balance
 
   def initialize(balance = 0)
     @balance = balance
@@ -31,7 +31,8 @@ class Oystercard
 
   private
 
-  attr_writer :balance, :in_journey
+  attr_writer :balance
+  attr_accessor :in_journey
 
   MAX_BALANCE = 100
   LOW_BALANCE = 1

@@ -60,8 +60,12 @@ describe Oystercard do
         it "deducts fare" do
           oystercard.top_up(20)
           oystercard.touch_in
-          expect { oystercard.touch_out }.to change {oystercard.balance }.by -2
+          expect { oystercard.touch_out }.to change {oystercard.balance }.by -Oystercard::FARE
         end
       end
+  end
+
+  describe '#origin' do
+    it { is_expected.to respond_to :origin }
   end
 end
