@@ -70,16 +70,10 @@ describe Oystercard do
       oystercard.touch_in(:station)
       expect { oystercard.touch_out(:station) }.to change { oystercard.entry }.to nil
     end
-    it 'updates @exit with exit station'do
-      oystercard.touch_in(:station)
-      expect { oystercard.touch_out(:station) }.to change { oystercard.exit }.to :station
-    end
     it 'updates @journeys with hash of entry and exit stations'do
       oystercard.touch_in(:station)
       oystercard.touch_out(:station)
-      entry_station = oystercard.entry
-      exit_station = oystercard.exit
-      expect(oystercard.journeys.last).to include({:entry => entry_station, :exit => exit_station})
+      expect(oystercard.journeys.last).to include({:entry => :station, :exit => :station})
     end
 
       context "change balance" do
@@ -89,6 +83,10 @@ describe Oystercard do
           expect { oystercard.touch_out(:station) }.to change {oystercard.balance }.by -Oystercard::FARE
         end
       end
-
     end
+  describe '#journeys' do
+    it 'card has an empty list of journeys by default' do
+      expect(oystercard.journeys).to eq []
+    end
+  end
   end
