@@ -24,7 +24,7 @@ class Oystercard
     @origin = entry_station
   end
 
-  def touch_out
+  def touch_out(exit_station)
     raise 'ERROR! Not travelling!' if in_journey? == false
     change_journey_status
     deduct(FARE)

@@ -53,30 +53,33 @@ describe Oystercard do
       end
   end
 
-  describe '#touch_out' do
+  describe '#touch_out(exit_station)' do
     let(:station){ double :station }
+    before(:each){ oystercard.top_up(10) }
     it 'takes one argument' do
       expect(oystercard).to respond_to(:touch_out).with(1).argument
     end
     it 'changes #in_journey to false' do
-      oystercard.top_up(10)
       oystercard.touch_in(:station)
-      expect { oystercard.touch_out }.to change { oystercard.in_journey? }.to false
+      expect { oystercard.touch_out(:station) }.to change { oystercard.in_journey? }.to false
     end
     it 'raises error if touch_out when not in journey' do
-      expect { oystercard.touch_out }.to raise_error 'ERROR! Not travelling!'
+      expect { oystercard.touch_out(:station) }.to raise_error 'ERROR! Not travelling!'
     end
     it 'sets #origin to nil' do
-      oystercard.top_up(10)
       oystercard.touch_in(:station)
-      expect { oystercard.touch_out }.to change { oystercard.origin }.to nil
+      expect { oystercard.touch_out(:station) }.to change { oystercard.origin }.to nil
+    end
+    it 'updates @exit with exit station'do
+      oystercard.touch_in(:station)
+      expect { oystercard.touch_out(:station) }.to change { oystercard.exit }.to :station
     end
 
       context "change balance" do
         it "deducts fare" do
           oystercard.top_up(20)
           oystercard.touch_in(:station)
-          expect { oystercard.touch_out }.to change {oystercard.balance }.by -Oystercard::FARE
+          expect { oystercard.touch_out(:station) }.to change {oystercard.balance }.by -Oystercard::FARE
         end
       end
 
