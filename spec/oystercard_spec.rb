@@ -37,6 +37,13 @@ describe Oystercard do
       oystercard.touch_in
       expect { oystercard.touch_in }.to raise_error 'Already travelling'
     end
+    it 'updates @origin with the current station' do
+      station = :waterloo
+      expect(oystercard).to receive(:origin).and_return(station)
+      oystercard.top_up(10)
+      oystercard.touch_in(station)
+      expect(oystercard.origin).to eq station
+    end
       context 'low_balance' do
         it 'Raises an error' do
           low_balance = Oystercard::LOW_BALANCE
@@ -67,5 +74,6 @@ describe Oystercard do
 
   describe '#origin' do
     it { is_expected.to respond_to :origin }
+    it ''
   end
 end

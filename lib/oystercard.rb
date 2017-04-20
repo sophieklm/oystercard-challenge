@@ -17,6 +17,9 @@ class Oystercard
     in_journey
   end
 
+  def origin
+  end
+
   def touch_in
     raise 'Not enough funds' if balance < LOW_BALANCE
     raise 'Already travelling' if in_journey?
