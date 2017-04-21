@@ -30,28 +30,36 @@ describe Oystercard do
   describe '#touch_in(entry_station)' do
     let(:station){ double :station }
     subject(:oystercard) { described_class.new }
+    before(:each) { oystercard.top_up(20) }
     it 'changes #in_journey? to true' do
-      oystercard.top_up(20)
       expect { oystercard.touch_in(:station) }.to change { oystercard.in_journey? }.to true
     end
     it '#touch_in(entry_station) when already travelling raises error' do
-      oystercard.top_up(10)
       oystercard.touch_in(:station)
       expect { oystercard.touch_in(:station) }.to raise_error 'Already travelling'
     end
       context 'low_balance' do
         it 'Raises an error' do
           low_balance = Oystercard::LOW_BALANCE
-          oystercard.top_up(low_balance - 1)
+          oystercard.top_up(low_balance - 21)
           expect { oystercard.touch_in(:station) }.to raise_error 'Not enough funds'
         end
       end
-      it 'updates @entry with the current station' do
-        oystercard.top_up(10)
-        oystercard.touch_in(:station)
-        expect(oystercard.entry).to eq :station
-      end
+    it 'updates @entry with the current station' do
+      oystercard.touch_in(:station)
+      expect(oystercard.entry).to eq :station
+    end
+    it 'starts a new journey' do
+      expect { oystercard.touch_in(:station) }.to change { oystercard.current_journey }.to be_truthy
+    end
   end
+
+  describe '#current_journey' do
+    it 'will be nil before we touch in' do
+      expect(Oystercard.new.current_journey).to be_nil
+    end
+  end
+
 
   describe '#touch_out(exit_station)' do
     let(:station){ double :station }

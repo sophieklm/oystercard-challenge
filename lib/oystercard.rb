@@ -1,7 +1,7 @@
 
 class Oystercard
 
-  attr_reader :balance, :entry, :exit, :journeys
+  attr_reader :balance, :entry, :exit, :journeys, :current_journey
 
   def initialize(balance = 0)
     @balance = balance
@@ -24,6 +24,8 @@ class Oystercard
     raise 'Already travelling' if in_journey?
     change_journey_status
     @entry = entry_station
+    @current_journey = Journey.new
+    @current_journey.start_journey(entry_station)
   end
 
   def touch_out(exit_station)
@@ -37,23 +39,20 @@ class Oystercard
 
   private
 
-  attr_writer :balance
-  attr_accessor :in_journey
-
   MAX_BALANCE = 100
   LOW_BALANCE = 1
   FARE = 2
 
   def exceed_balance?(amount)
-    self.balance + amount > MAX_BALANCE
+    @balance + amount > MAX_BALANCE
   end
 
   def increment_balance(amount)
-    self.balance += amount
+    @balance += amount
   end
 
   def deduct(fare)
-    self.balance -= fare
+    @balance -= fare
   end
 
   def add_journey
@@ -65,7 +64,7 @@ class Oystercard
   end
 
   def change_journey_status
-    return self.in_journey = false if in_journey?
-    return self.in_journey = true if in_journey? == false
+    return @in_journey = false if in_journey?
+    return @in_journey = true if in_journey? == false
   end
 end
