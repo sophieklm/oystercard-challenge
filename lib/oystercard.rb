@@ -1,3 +1,4 @@
+require_relative 'journey'
 
 class Oystercard
 
@@ -20,15 +21,15 @@ class Oystercard
   def touch_in(entry_station)
     raise 'Not enough funds' if balance < LOW_BALANCE
     raise 'Already travelling' if in_journey?
-    @current_journey = Journey.new
+    new_journey
     @current_journey.start_journey(entry_station)
   end
 
   def touch_out(exit_station)
     raise 'ERROR! Not travelling!' if in_journey? == false
     @current_journey.end_journey(exit_station)
-    @current_journey = nil
-    deduct(FARE)
+    deduct(@current_journey.fare)
+    reset_journey
     add_journey
   end
 
@@ -36,10 +37,18 @@ class Oystercard
 
   MAX_BALANCE = 100
   LOW_BALANCE = 1
-  FARE = 2
+
 
   def exceed_balance?(amount)
     @balance + amount > MAX_BALANCE
+  end
+
+  def new_journey
+    @current_journey = Journey.new
+  end
+
+  def reset_journey
+    @current_journey = nil
   end
 
   def increment_balance(amount)

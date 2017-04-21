@@ -80,7 +80,7 @@ describe Oystercard do
         it "deducts fare" do
           oystercard.top_up(20)
           oystercard.touch_in(:station)
-          expect { oystercard.touch_out(:station) }.to change {oystercard.balance }.by -Oystercard::FARE
+          expect { oystercard.touch_out(:station) }.to change {oystercard.balance }.by -Journey::MIN_FARE
         end
       end
     end

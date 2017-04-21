@@ -11,4 +11,12 @@ class Journey
   	@exit_station = station
   end
 
+  def fare
+  	MIN_FARE
+  end
+
+  private
+
+  MIN_FARE = 2
+
 end
