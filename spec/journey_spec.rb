@@ -34,4 +34,20 @@ describe Journey do
     end
   end
 
+  describe '#journey_complete?' do
+    it 'returns true if entry and exit station exist' do
+      journey.start_journey(:station)
+      journey.end_journey(:station)
+      expect(journey.journey_complete?).to be true
+    end
+    it 'returns false if entry station nil' do
+      journey.start_journey(:station)
+      expect(journey.journey_complete?).to be false
+    end
+    it 'returns false if entry station nil' do
+      journey.end_journey(:station)
+      expect(journey.journey_complete?).to be false
+    end
+  end
+
 end

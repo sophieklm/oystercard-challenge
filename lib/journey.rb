@@ -15,6 +15,10 @@ class Journey
     @entry_station && @exit_station ? MIN_FARE : PENALTY_FARE
   end
 
+  def journey_complete?
+    @entry_station && @exit_station ? true : false
+  end
+
   private
 
   MIN_FARE = 2
