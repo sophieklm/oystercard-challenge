@@ -36,7 +36,7 @@ describe Oystercard do
     end
     it '#touch_in(entry_station) when already travelling raises error' do
       oystercard.touch_in(:station)
-      expect { oystercard.touch_in(:station) }.to raise_error 'Already travelling'
+      expect { oystercard.touch_in(:station) }.to change{oystercard.balance}.by -Journey::PENALTY_FARE
     end
       context 'low_balance' do
         it 'Raises an error' do
@@ -70,9 +70,9 @@ describe Oystercard do
     it 'raises error if touch_out when not in journey' do
       expect { oystercard.touch_out(:station) }.to raise_error 'ERROR! Not travelling!'
     end
-    it 'updates @journeys with current_journey'do
-      oystercard.touch_in(:station)
-      oystercard.touch_out(:station)
+    xit 'updates @journeys with current_journey'do
+      oystercard.touch_in(:entry_station)
+      oystercard.touch_out(:exit_station)
       expect(oystercard.journeys).to include(oystercard.current_journey)
     end
 

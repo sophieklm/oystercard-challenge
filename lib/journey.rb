@@ -12,11 +12,12 @@ class Journey
   end
 
   def fare
-  	MIN_FARE
+    @entry_station && @exit_station ? MIN_FARE : PENALTY_FARE
   end
 
   private
 
   MIN_FARE = 2
+  PENALTY_FARE = 6
 
 end
