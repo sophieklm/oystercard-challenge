@@ -15,22 +15,21 @@ class Oystercard
   end
 
   def in_journey?
-    !!@current_journey
+    !!@current_journey && !(current_journey.journey_complete?)
   end
 
-  def touch_in(entry_station)
+  def touch_in(station)
     raise 'Not enough funds' if balance < LOW_BALANCE
-    deduct(@current_journey.fare) && add_journey if in_journey?
+    penalty if in_journey?
     new_journey
-    @current_journey.start_journey(entry_station)
+    @current_journey.start_journey(station)
   end
 
-  def touch_out(exit_station)
-    raise 'ERROR! Not travelling!' if in_journey? == false
-    @current_journey.end_journey(exit_station)
+  def touch_out(station)
+    penalty unless in_journey?
+    @current_journey.end_journey(station)
     deduct(@current_journey.fare)
     add_journey
-    reset_journey
   end
 
   private
@@ -60,6 +59,11 @@ class Oystercard
   end
 
   def add_journey
-     @journeys << @current_journey
+    @journeys << @current_journey
   end
+
+  def penalty
+    deduct(@current_journey.fare) && add_journey
+  end
+
 end
