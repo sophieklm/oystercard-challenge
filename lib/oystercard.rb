@@ -1,12 +1,10 @@
 
 class Oystercard
 
-  attr_reader :balance, :entry, :exit, :journeys, :current_journey
+  attr_reader :balance, :journeys, :current_journey
 
   def initialize(balance = 0)
     @balance = balance
-    @entry = nil
-    @exit = nil
     @journeys = []
   end
 
@@ -16,25 +14,22 @@ class Oystercard
   end
 
   def in_journey?
-    !!@entry
+    !!@current_journey
   end
 
   def touch_in(entry_station)
     raise 'Not enough funds' if balance < LOW_BALANCE
     raise 'Already travelling' if in_journey?
-    change_journey_status
-    @entry = entry_station
     @current_journey = Journey.new
     @current_journey.start_journey(entry_station)
   end
 
   def touch_out(exit_station)
     raise 'ERROR! Not travelling!' if in_journey? == false
-    change_journey_status
+    @current_journey.end_journey(exit_station)
+    @current_journey = nil
     deduct(FARE)
-    @exit = exit_station
     add_journey
-    reset_journey
   end
 
   private
@@ -56,15 +51,6 @@ class Oystercard
   end
 
   def add_journey
-     @journeys << { entry: @entry, exit: @exit }
-  end
-
-  def reset_journey
-    @entry, @exit = nil
-  end
-
-  def change_journey_status
-    return @in_journey = false if in_journey?
-    return @in_journey = true if in_journey? == false
+     @journeys << @current_journey
   end
 end

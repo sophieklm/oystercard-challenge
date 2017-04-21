@@ -45,10 +45,6 @@ describe Oystercard do
           expect { oystercard.touch_in(:station) }.to raise_error 'Not enough funds'
         end
       end
-    it 'updates @entry with the current station' do
-      oystercard.touch_in(:station)
-      expect(oystercard.entry).to eq :station
-    end
     it 'starts a new journey' do
       expect { oystercard.touch_in(:station) }.to change { oystercard.current_journey }.to be_truthy
     end
@@ -74,14 +70,10 @@ describe Oystercard do
     it 'raises error if touch_out when not in journey' do
       expect { oystercard.touch_out(:station) }.to raise_error 'ERROR! Not travelling!'
     end
-    it 'sets #entry to nil' do
-      oystercard.touch_in(:station)
-      expect { oystercard.touch_out(:station) }.to change { oystercard.entry }.to nil
-    end
-    it 'updates @journeys with hash of entry and exit stations'do
+    it 'updates @journeys with current_journey'do
       oystercard.touch_in(:station)
       oystercard.touch_out(:station)
-      expect(oystercard.journeys.last).to include({:entry => :station, :exit => :station})
+      expect(oystercard.journeys).to include(oystercard.current_journey)
     end
 
       context "change balance" do
