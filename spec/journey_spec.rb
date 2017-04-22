@@ -1,8 +1,7 @@
 require 'journey'
 
-
 describe Journey do
-  subject(:journey) {described_class.new}
+  subject(:journey) { described_class.new }
 
   it 'starts a journey' do
     expect(journey).to respond_to(:start_journey).with(1).argument
@@ -49,5 +48,4 @@ describe Journey do
       expect(journey.journey_complete?).to be false
     end
   end
-
 end

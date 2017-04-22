@@ -1,14 +1,15 @@
-
 class Journey
-
   attr_reader :entry_station, :exit_station
+
+  MIN_FARE = 2
+  PENALTY_FARE = 6
 
   def start_journey(station)
   	@entry_station = station
   end
 
   def end_journey(station)
-  	@exit_station = station
+    @exit_station = station
   end
 
   def fare
@@ -18,10 +19,4 @@ class Journey
   def journey_complete?
     @entry_station && @exit_station ? true : false
   end
-
-  private
-
-  MIN_FARE = 2
-  PENALTY_FARE = 6
-
 end

@@ -1,7 +1,6 @@
 require 'station'
 
 describe Station do
-
 	describe '#new' do
 		subject { Station.new(:waterloo, 2) }
 		it 'takes 2 arguments' do
@@ -15,4 +14,3 @@ describe Station do
 		end
 	end
 end
-
