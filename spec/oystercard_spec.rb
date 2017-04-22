@@ -2,7 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
   subject(:oystercard) { described_class.new }
-  let(:station){ double :station }
+  let(:station) { double :station }
 
   max_balance = Oystercard::MAX_BALANCE
   min_fare = Journey::MIN_FARE
@@ -18,7 +18,6 @@ describe Oystercard do
     it 'Expects #top_up to change balance' do
       expect { oystercard.top_up(10) }.to change { oystercard.balance }.by(10)
     end
-
     it 'Should raise error if top up breaches limit' do
       oystercard.top_up(max_balance)
       expect { oystercard.top_up(1) }.to raise_error "Top-up over max balance £#{max_balance}"
@@ -33,12 +32,14 @@ describe Oystercard do
 
   describe '#touch_in(entry_station)' do
     subject(:oystercard) { described_class.new }
-    before(:each) { oystercard.top_up(max_balance) }
+    before(:each) do
+      oystercard.top_up(max_balance)
+      oystercard.touch_in(:station)
+    end
     it 'changes #in_journey? to true' do
-      expect { oystercard.touch_in(:station) }.to change { oystercard.in_journey? }.to true
+      expect(oystercard.in_journey?).to be true
     end
     it '#touch_in(entry_station) when already travelling charges penalty' do
-      oystercard.touch_in(:station)
       expect { oystercard.touch_in(:station) }.to change{oystercard.balance}.by -Journey::PENALTY_FARE
     end
       context 'low_balance' do
@@ -48,7 +49,7 @@ describe Oystercard do
         end
       end
     it 'starts a new journey' do
-      expect { oystercard.touch_in(:station) }.to change { oystercard.current_journey }.to be_truthy
+      expect(oystercard.current_journey).to be_truthy
     end
   end
 
@@ -72,18 +73,12 @@ describe Oystercard do
     end
     it 'charges penalty if touch_out when not in journey' do
       oystercard.touch_out(:station)
-      expect { oystercard.touch_out(:station) }.to change{oystercard.balance}.by -penalty_fare + min_fare
+      expect { oystercard.touch_out(:station) }.to change{oystercard.balance}.by -penalty_fare
     end
-    it 'updates @journeys with current_journey'do
-      oystercard.touch_out(:exit_station)
-      expect(oystercard.journeys).to include(oystercard.current_journey)
+    it "deducts fare" do
+      expect { oystercard.touch_out(:station) }.to change {oystercard.balance }.by -min_fare
     end
-      context "change balance" do
-        it "deducts fare" do
-          expect { oystercard.touch_out(:station) }.to change {oystercard.balance }.by -min_fare
-        end
-      end
-    end
+  end
 
   describe '#journeys' do
     it 'card has an empty list of journeys by default' do
